@@ -1019,7 +1019,7 @@ require("lazy").setup({
 					{ name = "buffer", keyword_length = 3 },
 				},
 				cmp.setup.filetype("systemverilog", {
-					enabled = true, -- Disable autocompletion for SystemVerilog
+					enabled = false, -- Disable autocompletion for SystemVerilog
 				}),
 			})
 		end,
