@@ -188,7 +188,12 @@ vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Go to previous [D]
 vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Go to next [D]iagnostic message" })
 vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, { desc = "Show diagnostic [E]rror messages" })
 vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
-
+vim.keymap.set(
+	"n",
+	"<leader>l",
+	":lua Snacks.lazygit.open()<CR>",
+	{ desc = "Open [L]azygit", noremap = true, silent = true }
+)
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
 -- is not what someone will guess without a bit more experience.
@@ -269,6 +274,8 @@ require("lazy").setup({
 	"smolck/command-completion.nvim",
 
 	"ThePrimeagen/harpoon",
+
+	--	"hrsh7th/cmp-cmdline",
 	-- {
 	-- 	"saghen/blink.cmp",
 	-- 	lazy = false, -- lazy loading handled internally
@@ -1181,17 +1188,17 @@ require("lazy").setup({
 			-- Simple and easy statusline.
 			--  You could remove this setup call if you don't like it,
 			--  and try some other statusline plugin
-			local statusline = require("mini.statusline")
+			--local statusline = require("mini.statusline")//NOTE: uncomment
 			-- set use_icons to true if you have a Nerd Font
-			statusline.setup({ use_icons = vim.g.have_nerd_font })
+			--statusline.setup({ use_icons = vim.g.have_nerd_font })//NOTE: uncomment
 
 			-- You can configure sections in the statusline by overriding their
 			-- default behavior. For example, here we set the section for
 			-- cursor location to LINE:COLUMN
-			---@diagnostic disable-next-line: duplicate-set-field
-			statusline.section_location = function()
-				return "%2l:%-2v"
-			end
+			--@diagnostic disable-next-line: duplicate-set-field
+			--statusline.section_location = function()
+			--		return "%2l:%-2v"
+			--	end
 
 			-- ... and there is more!
 			--  Check out: https://github.com/echasnovski/mini.nvim

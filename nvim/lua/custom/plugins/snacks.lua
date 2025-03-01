@@ -2,8 +2,8 @@ return {
 	"folke/snacks.nvim",
 	priority = 1000,
 	lazy = false, -- Ensures it loads on startup
-	---@type snacks.Config
 	opts = {
+		-- Main dashboard configuration
 		dashboard = {
 			enabled = true,
 			width = 60,
@@ -42,6 +42,8 @@ return {
 						enabled = package.loaded.lazy ~= nil,
 					},
 					{ icon = " ", key = "q", desc = "Quit", action = ":qa" },
+					-- Added <leader>l for Lazygit (accessible from dashboard)
+					{ icon = " ", key = "l", desc = "Lazygit", action = ":lua Snacks.lazygit.open()" },
 				},
 				header = [[
 
@@ -49,7 +51,7 @@ return {
 ██║   ██║ ██║     ██╔════╝ ██║
 ██║   ██║ ██║     ███████╗ ██║
 ╚██╗ ██╔╝ ██║     ╚════██║ ██║
- ╚████╔╝  ███████╗███████║ ██║  
+   ╚████╔╝  ███████╗███████║ ██║  
   ╚═══╝   ╚══════╝╚══════╝ ╚═╝
 
 ███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗
@@ -60,6 +62,7 @@ return {
 ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝
 ]],
 			},
+			-- Rest of the dashboard config remains unchanged
 			formats = {
 				icon = function(item)
 					if item.file and (item.icon == "file" or item.icon == "directory") then
@@ -90,7 +93,6 @@ return {
 				{ section = "startup" },
 				{
 					section = "terminal",
-					-- github.com/TheZoraiz/ascii-image-converter.git dependency
 					cmd = "ascii-image-converter https://raw.githubusercontent.com/Yashas2801/my_workflow/ac4c2b5b892fd004ac0db545fe56f251514f5986/cpu_vector.jpg -b -c -n",
 					random = 10,
 					pane = 2,
@@ -99,35 +101,37 @@ return {
 				},
 			},
 		},
+
+		-- Indent configuration (unchanged)
 		indent = {
 			priority = 1,
-			enabled = true, -- enable indent guides
+			enabled = true,
 			char = "│",
-			only_scope = false, -- only show indent guides of the scope
-			only_current = false, -- only show indent guides in the current window
-			hl = "SnacksIndent", -- highlight group for indent guides
+			only_scope = false,
+			only_current = false,
+			hl = "SnacksIndent",
 			animate = {
 				enabled = vim.fn.has("nvim-0.10") == 1,
 				style = "out",
 				easing = "linear",
 				duration = {
-					step = 20, -- ms per step
-					total = 500, -- maximum duration
+					step = 20,
+					total = 500,
 				},
 			},
 			scope = {
-				enabled = true, -- enable highlighting the current scope
+				enabled = true,
 				priority = 200,
 				char = "│",
-				underline = false, -- underline the start of the scope
-				only_current = false, -- only show scope in the current window
-				hl = "SnacksIndentScope", -- highlight group for scopes
+				underline = false,
+				only_current = false,
+				hl = "SnacksIndentScope",
 			},
 			chunk = {
 				enabled = false,
 				only_current = false,
 				priority = 200,
-				hl = "SnacksIndentChunk", -- highlight group for chunk scopes
+				hl = "SnacksIndentChunk",
 				char = {
 					corner_top = "┌",
 					corner_bottom = "└",
@@ -140,19 +144,23 @@ return {
 				return vim.g.snacks_indent ~= false and vim.b[buf].snacks_indent ~= false and vim.bo[buf].buftype == ""
 			end,
 		},
+
+		-- Animation settings (unchanged)
 		animate = {
-			duration = 20, -- ms per step
+			duration = 20,
 			easing = "linear",
-			fps = 60, -- frames per second, global setting for all animations
+			fps = 60,
 		},
+
+		-- Notifier configuration (unchanged)
 		notifier = {
-			timeout = 3000, -- default timeout in ms
+			timeout = 3000,
 			width = { min = 40, max = 0.4 },
 			height = { min = 1, max = 0.6 },
 			margin = { top = 0, right = 1, bottom = 0 },
-			padding = true, -- add 1 cell of left/right padding to the notification window
-			sort = { "level", "added" }, -- sort by level and time
-			level = vim.log.levels.TRACE, -- minimum log level to display
+			padding = true,
+			sort = { "level", "added" },
+			level = vim.log.levels.TRACE,
 			icons = {
 				error = " ",
 				warn = " ",
@@ -163,11 +171,40 @@ return {
 			keep = function(notif)
 				return vim.fn.getcmdpos() > 0
 			end,
-			style = "compact", -- render style: "compact", "fancy", or "minimal"
-			top_down = true, -- place notifications from top to bottom
-			date_format = "%R", -- time format for notifications
-			more_format = " ↓ %d lines ", -- format for footer when more lines are available
-			refresh = 50, -- refresh at most every 50ms
+			style = "compact",
+			top_down = true,
+			date_format = "%R",
+			more_format = " ↓ %d lines ",
+			refresh = 50,
+		},
+
+		-- Lazygit integration (unchanged, except for optional global keybinding comment)
+		lazygit = {
+			configure = true, -- Automatically configure lazygit with Neovim colorscheme
+			config = {
+				os = { editPreset = "nvim-remote" },
+				gui = {
+					nerdFontsVersion = "3", -- Use Nerd Fonts v3
+				},
+			},
+			theme_path = vim.fn.stdpath("cache") .. "/lazygit-theme.yml",
+			theme = {
+				[241] = { fg = "Special" },
+				activeBorderColor = { fg = "MatchParen", bold = true },
+				cherryPickedCommitBgColor = { fg = "Identifier" },
+				cherryPickedCommitFgColor = { fg = "Function" },
+				defaultFgColor = { fg = "Normal" },
+				inactiveBorderColor = { fg = "FloatBorder" },
+				optionsTextColor = { fg = "Function" },
+				searchingActiveBorderColor = { fg = "MatchParen", bold = true },
+				selectedLineBgColor = { bg = "Visual" },
+				unstagedChangesColor = { fg = "DiagnosticError" },
+			},
+			win = {
+				style = "lazygit",
+			},
+			-- Optional: For a global <leader>l keybinding, add this elsewhere in your config:
+			-- vim.keymap.set("n", "<leader>l", ":lua Snacks.lazygit.open()<CR>", { noremap = true, silent = true })
 		},
 	},
 }
